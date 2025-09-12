@@ -1,0 +1,12 @@
+{
+  "name": "info-clapper",
+  "version": "1.0.0",
+  "description": "web about movies information",
+  "license": "MIT",
+  "author": "Humberto",
+  "type": "commonjs",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  }
+}
