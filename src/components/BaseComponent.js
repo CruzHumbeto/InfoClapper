@@ -9,17 +9,27 @@ export default class BaseComponent extends HTMLElement {
 
     // lifecycle methods
     connectedCallback() {
-        this.render(); // render the component
-        this.setUpListeners(); // set up listeners
+        const result = this.render();
+        const finalize = () => {
+            this.setUpListeners();
+            this.afterRender();
+        };
+        result instanceof Promise ? result.then(finalize).catch(console.error) : finalize();
     }
 
     // setter and rendering for state management
     setState(newState) {
-        this.state = {...this.state, ...newState}; 
-        this.render();
+        this.state = { ...this.state, ...newState };
+        const result = this.render();
+        const finalize = () => {
+            this.setUpListeners();
+            this.afterRender();
+        };
+        result instanceof Promise ? result.then(finalize).catch(console.error) : finalize();
     }
 
     // override functions in child classes
     setUpListeners() {}
     cleanUp() {}
+    afterRender() {}
 }

@@ -2,12 +2,17 @@ import { API_KEY } from './secrets.js';
 import './components/Header/Header.js';
 import './components/MovieCard/card.js';
 import './components/MovieDetails/MovieDetails.js';
+import './components/SideBar/SideBar.js';
 
 const main = document.querySelector("main");
 const headerContainer = document.querySelector("header");
+const section_aside = document.getElementById("section_aside");
 const header = document.createElement("header-component");
 headerContainer.appendChild(header);
 console.log("Hello Movies ");
+
+const side_bar = document.createElement("side-bar");
+section_aside.appendChild(side_bar);
 
 // <---- fetch API information --->
 

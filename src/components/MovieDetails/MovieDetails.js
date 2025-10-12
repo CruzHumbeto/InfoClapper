@@ -1,6 +1,7 @@
 // web component - movie details
 
 import BaseComponent from "../BaseComponent.js";
+import styles from "./MovieDetails.css?inline";
 
 class MovieDetails extends BaseComponent {
     constructor() {
@@ -8,13 +9,6 @@ class MovieDetails extends BaseComponent {
     }
 
     async render() {
-        const cssUrl = new URL("./MovieDetails.css", import.meta.url);
-        let css = "";
-        try {
-          const response = await fetch(cssUrl);
-          css = response.ok ? await response.text() : "";
-        } catch (_) { css = ""; }
-
         // Normalize incoming data to avoid runtime errors
         const title = this.title || "...";
         const poster = this.poster || "";
@@ -29,7 +23,7 @@ class MovieDetails extends BaseComponent {
 
         this.shadowRoot.innerHTML = `
             <style>
-                ${css}
+                ${styles}
             </style>
             <div class="movie-details">
                 <h1>${title}</h1>

@@ -4,9 +4,17 @@
   "description": "web about movies information",
   "license": "MIT",
   "author": "Humberto",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.html",
   "scripts": {
-    "test": "test"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide": "^0.544.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.9"
   }
 }

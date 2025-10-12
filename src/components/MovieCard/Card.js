@@ -1,6 +1,7 @@
 // web component - card
 
 import BaseComponent from "../BaseComponent.js";
+import styles from "./Card.css?inline";
 
 
 export  class MovieCard extends BaseComponent {
@@ -25,16 +26,9 @@ export  class MovieCard extends BaseComponent {
    }
 
     async render() {
-        const cssUrl = new URL("./Card.css", import.meta.url);
-        let css = "";
-        try {
-          const response = await fetch(cssUrl);
-          css = response.ok ? await response.text() : "";
-        } catch (_) { css = ""; }
-
         this.shadowRoot.innerHTML = `
             <style>
-                ${css}
+                ${styles}
             </style>
             <article class="movie-card">
                 <img class="movie__poster" src="${this.poster}" alt="${this.title}">
