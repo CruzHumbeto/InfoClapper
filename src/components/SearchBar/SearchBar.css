@@ -1,0 +1,124 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  width: 2.75rem;
+  max-width: 28rem;
+  transition: width var(--transition-base);
+}
+
+:host(:hover),
+:host(:focus-within) {
+  width: clamp(16rem, 40vw, 28rem);
+}
+
+section {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  background-color: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  transition: gap var(--transition-base), padding var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+}
+
+:host(:hover) section,
+:host(:focus-within) section {
+  gap: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
+  border-color: var(--primary-color);
+  background-color: rgba(34, 34, 34, 0.95);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  opacity: 0;
+  pointer-events: none;
+  transition: width var(--transition-base), opacity var(--transition-base);
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus {
+  outline: none;
+}
+
+:host(:hover) input,
+:host(:focus-within) input {
+  width: 100%;
+  padding: var(--spacing-xs) 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--primary-color);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  :host {
+    width: 2.5rem;
+  }
+
+  :host(:hover),
+  :host(:focus-within) {
+    width: min(90vw, 24rem);
+  }
+
+  input {
+    font-size: var(--font-size-sm);
+  }
+
+  button {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  button svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
