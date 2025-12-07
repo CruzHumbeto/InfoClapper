@@ -3,12 +3,21 @@ import './components/Header/Header.js';
 import './components/MovieCard/card.js';
 import './components/MovieDetails/MovieDetails.js';
 import './components/SideBar/SideBar.js';
+import './components/Slider/Slider.js';
 
 const main = document.querySelector("main");
 const headerContainer = document.querySelector("header");
 const section_aside = document.getElementById("section_aside");
+
+
 const header = document.createElement("header-component");
+const slider = document.createElement("movie-slider");
+const cardsContainer = document.createElement("section");
+cardsContainer.id = "trending-cards";
+
 headerContainer.appendChild(header);
+main.appendChild(slider);
+main.appendChild(cardsContainer);
 console.log("Hello Movies ");
 
 const side_bar = document.createElement("side-bar");
@@ -113,7 +122,7 @@ const renderCards = (info, placeholder) => {
 async function init() {
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
-    renderCards(trendingWeekMovies, main);
+    renderCards(trendingWeekMovies, cardsContainer);
 }
 
 init();

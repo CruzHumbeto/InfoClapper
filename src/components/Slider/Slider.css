@@ -1,0 +1,174 @@
+/* Slider component styles */
+
+:host {
+    display: block;
+    width: 100%;
+    padding-inline: var(--spacing-md);
+    box-sizing: border-box;
+}
+
+section {
+    /*display: flex;
+    flex-direction: column;*/
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-xl);
+    min-height: 12rem;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.18);
+}
+
+.info_item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--spacing-md);
+    min-height: 10rem;
+    padding: var(--spacing-md);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scroll-marker-group: after;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    list-style: none;
+    margin: 0;
+    scrollbar-width: none;
+    anchor-name: --carousel;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel>.slide {
+    flex: 0 0 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    min-height: 15rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    position: relative;
+    transition: transform 0.4s ease;
+}
+
+.carousel>.slide:hover {
+    transform: translateY(-0.4rem);
+}
+
+.slide_tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.slide_title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.slide_summary {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.carousel::scroll-button(*) {
+    position: fixed;
+    position-anchor: --carousel;
+    /*z-index: 4;*/
+    width: 2.75rem;
+    height: 2.75rem;
+    /*display: flex;*/
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(10, 10, 10, 0.8);
+    color: var(--text-primary);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    cursor: pointer;
+    translate: 0 -50%;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.carousel::scroll-button(*) {
+    background: rgba(10, 10, 10, 0.92);
+    transform: scale(1.05);
+}
+
+.carousel::scroll-button(left) {
+    position-area: inline-start center;
+    content: "←" / "Previous";
+    left: var(--spacing-sm);
+}
+
+.carousel::scroll-button(right) {
+    position-area: inline-end center;
+    content: "→" / "Next";
+    right: var(--spacing-sm);
+}
+
+
+.carousel::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding-block: var(--spacing-sm);
+    margin: 0;
+}
+
+.carousel>.slide::scroll-marker {
+    content: "";
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.carousel>.slide::scroll-marker:hover {
+    transform: scale(1.1);
+}
+
+.carousel>.slide::scroll-marker:target-current {
+    background: var(--color-primary);
+    transform: scale(1.2);
+}
+
+@media (min-width: 768px) {
+    section {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .info_item {
+        flex: 0 0 18rem;
+    }
+
+    .carousel {
+        flex: 1;
+    }
+}
