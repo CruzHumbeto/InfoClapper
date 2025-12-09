@@ -9,7 +9,24 @@ const toPascalCase = (value) => value.replace(/(^\w|[\s-_]\w)/g, (segment) => se
 export class SideBar extends BaseComponent {
     constructor() {
         super();
+        this._genres = [];
         //this.attachShadow({ mode: 'open' });
+    }
+
+    static get observedAttributes() {
+        return ['language'];
+    }
+    
+    get genres() {
+        return this._genres;
+    }
+
+    set genres(value) {
+        if (Array.isArray(value)) {
+            this._genres = value;
+            this.render(); // Re-render when data changes
+            this.afterRender(); // Re-attach listeners/icons
+        }
     }
     
     render(){
@@ -22,14 +39,11 @@ export class SideBar extends BaseComponent {
                     <button class="toggle">
                         <i data-lucide="menu"></i>
                     </button>
-                    <button class="close">
-                        <i data-lucide="circle-x"></i>
-                    </button>
                 </header>
                 <nav>
                     <ul>
                         <li>
-                            <select name="idioma" id="select-id">
+                            <select name="language" id="select-id">
                                 <option value="">
                                     <i data-lucide="languages"></i>
                                     Select Language
@@ -47,8 +61,20 @@ export class SideBar extends BaseComponent {
                         <li>
                             <i data-lucide="heart"></i><span>Popular</span>
                         </li>
-                        <li>
-                            <i data-lucide="funnel"></i><span>Genres</span>
+                        <li id="genre_list">
+                            <div>
+                                <i data-lucide="funnel"></i><span>Genres</span>
+                            </div>
+                            <div id="genre_container">
+                                <div class="wrapper">
+                                    <select name="genre" id="select-gen">
+                                        <button>
+                                            <selectedcontent></selectedcontent>
+                                        </button>
+                                        ${this._genres.map((genre) => `<option value="${genre.id}">${genre.name}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </nav>

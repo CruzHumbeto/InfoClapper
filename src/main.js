@@ -26,7 +26,25 @@ section_aside.appendChild(side_bar);
 // <---- fetch API information --->
 
 /**
- * 
+ * fetch genres list from the API
+ * @returns an array of genres information objects
+ */
+async function genre_list() {
+    try {
+        const response = await fetch("https://api.themoviedb.org/3/genre/movie/list?language=es-MX&api_key=" + API_KEY);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const genres = Array.isArray(data.genres) ? data.genres : [];
+        return genres;
+    } catch (err) {
+        console.error('Error fetching genres:', err);
+        return [];
+    }
+}
+
+
+/**
+ * fetch trending movies list from the API
  * @returns an array of movies information objects
  */
 async function fetch_trending_movie_week() {
@@ -123,6 +141,9 @@ async function init() {
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
     renderCards(trendingWeekMovies, cardsContainer);
+
+    const genres = await genre_list();
+    side_bar.genres = genres;
 }
 
 init();

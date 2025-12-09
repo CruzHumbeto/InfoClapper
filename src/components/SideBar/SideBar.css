@@ -101,9 +101,119 @@ select {
   outline: none;
 }
 
+
 select:focus {
   border-color: var(--primary-color);
 }
+
+
+#genre_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    /* No restricted width for the container, let it fit content */
+}
+
+/* Container for the select to animate height/opacity */
+#genre_container {
+  display: grid;
+  grid-template-rows: 0fr;
+  /* Add a slight delay on the 'out' transition so it doesn't snap shut instantly if cursor slips */
+  transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+  width: auto; /* Let it size to the select */
+}
+
+#genre_list:hover #genre_container,
+#genre_list:has(#select-gen:open) #genre_container {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+#genre_container > .wrapper {
+  overflow: hidden;
+}
+
+#select-gen {
+  width: auto; /* Auto width based on content */
+  min-width: 150px; /* Minimum legible width */
+  max-width: 220px; /* Prevent being too wide */
+  margin-left: var(--spacing-md);
+  
+  &, &::picker(select) {
+    appearance: base-select;
+  }
+  &::picker-icon{
+    display: none;
+  }
+
+  /* Dropdown animation */
+  &:not(:open)::picker(select){
+    opacity: 0;
+    transform: scale(.85);
+  }
+
+  &:open::picker(select){
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-light);
+  color: var(--text-primary);
+  cursor: pointer;
+
+  /* Picker (Dropdown) Container Styles */
+  &::picker(select){
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+    margin-block: var(--spacing-sm);
+    transition: display 0.3s, opacity 0.3s, transform 0.3s; /* Animating display allow-discrete is new, stick to opacity/transform */
+    box-shadow: var(--shadow-sm);
+    width: 15%;
+    max-height: 300px; /* Limit height */
+    overflow-y: auto;
+  }
+}
+
+/* Option styling */
+option {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex; /* Ensure content aligns nicely */
+  align-items: center;
+}
+
+option:hover {
+  background-color: var(--bg-card); /* Lighter background on hover */
+  color: var(--primary-color);
+}
+
+option:checked {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary, #fff);
+}
+
+selectedcontent{
+  display: block;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  overflow: visible;
+  white-space: nowrap;
+}
+
 
 /* Scroll behavior inside sidebar */
 nav {
