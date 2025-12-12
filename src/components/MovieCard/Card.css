@@ -108,3 +108,184 @@ slot[name="overview"] {
     font-size: var(--font-size-xs);
     color: var(--color-gray-600);
 }
+
+/* --- Variantes --- */
+
+/* V1 (Vertical Card / Default) */
+/* .movie-card--v1 uses base styles */
+
+/* V2 (Horizontal Scroll Marquee / Old Slider) */
+.movie-card--v2 {
+    width: 180px;
+    height: auto;
+    padding: 0;
+    margin: 0.3rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card--v2:hover {
+    transform: scale(1.05);
+}
+
+/* Wrappers specific to V2 */
+.movie-card--v2 .slider-card__poster-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+}
+
+.movie-card--v2 .movie__poster {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    display: block;
+    border-radius: var(--radius-md);
+}
+
+/* Overlay & Icon for V2 */
+.movie-card--v2 .slider-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card--v2:hover .slider-card__overlay {
+    opacity: 1;
+}
+
+.movie-card--v2 .slider-card__play-icon {
+    font-size: 2rem;
+    color: white;
+    background: var(--color-primary, #e50914);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+}
+
+/* Content specific to V2 */
+.movie-card--v2 .card__content {
+    height: auto;
+    padding: 0.5rem;
+}
+
+.movie-card--v2 .title-wrapper {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    mask-image: none; 
+}
+
+.movie-card--v2 .movie__title {
+    font-size: var(--font-size-sm, 0.875rem);
+    white-space: nowrap;
+    display: inline-block;
+    /* Default state: ellipsis if too long */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+/* Animation on Hover for V2 */
+.movie-card--v2:hover .movie__title {
+    /* Desactivar ellipsis para permitir overflow visible durante animación */
+    text-overflow: unset;
+    overflow: visible;
+    max-width: none;
+    
+    animation: scrollTextReappear 6s linear infinite;
+    animation-delay: 0.5s; 
+}
+
+@keyframes scrollTextReappear {
+    0% { transform: translateX(0); }
+    40% { transform: translateX(-120%); }
+    40.001% { transform: translateX(120%); opacity: 0; }
+    45% { opacity: 1; transform: translateX(120%); }
+    90% { transform: translateX(0); }
+    100% { transform: translateX(0); }
+}
+
+.movie-card--v2 .card__meta {
+    display: flex;
+    gap: 0.5rem;
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--color-gray-600, #999);
+}
+
+.movie-card--v2 .card__rating {
+    color: #ffc107;
+}
+
+.movie-card--v2 .card__year {
+    opacity: 0.8;
+}
+
+
+/* --- New Slider Variant (Carousel Item) --- */
+.movie-card--slider {
+    /* Styles inspired by .carousel>.slide in Slider.css */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem; /* var(--spacing-md) approximation */
+    padding: 1.5rem 1rem; /* var(--spacing-xl) var(--spacing-lg) */
+    min-height: 15rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    position: relative;
+    transition: transform 0.4s ease;
+    align-items: flex-start; /* Reset align-items from host center */
+    width: 100%; /* Adapts to container */
+    box-shadow: none; /* Override default card shadow */
+}
+
+.movie-card--slider:hover {
+    transform: translateY(-0.4rem);
+    box-shadow: none; 
+}
+
+/* Tag */
+.movie-card--slider .slide_tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+}
+
+/* Title */
+.movie-card--slider .slide_title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+    font-family: var(--font-family-primary);
+}
+
+/* Summary */
+.movie-card--slider .slide_summary {
+    margin: 0;
+    /*color: var(--text-secondary); */
+    color: #ccc; 
+    line-height: 1.5;
+    font-size: 0.9rem;
+    font-family: var(--font-family-primary);
+}

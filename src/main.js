@@ -115,12 +115,12 @@ async function openMovieDetails(movieId) {
 
 // render cards
 /**
- * 
- * @param {Array} info: an array of movies information objects 
- * @param {HTMLElement} placeholder: an HTML element where the cards will be rendered 
- * @returns 
+ * Render movie cards in a container
+ * @param {Array} info - an array of movies information objects 
+ * @param {HTMLElement} placeholder - an HTML element where the cards will be rendered 
+ * @param {string} variant - card variant type: 'default' | 'slider'
  */
-const renderCards = (info, placeholder) => {
+const renderCards = (info, placeholder, variant = 'v1') => {
     placeholder.innerHTML = "";
     if (!Array.isArray(info)) {
         console.error('renderCards expected an array, received:', info);
@@ -128,9 +128,14 @@ const renderCards = (info, placeholder) => {
     }
     info.forEach(movie => {
         const movieCard = document.createElement("movie-card");
-        movieCard.setAttribute("poster", `https://image.tmdb.org/t/p/w500${movie.poster_path}`);
-        movieCard.setAttribute("title", movie.title);
-        movieCard.setAttribute("overview", movie.overview);
+        // Solo variant usa setAttribute (es el único atributo observado)
+        movieCard.setAttribute("variant", variant);
+        // Propiedades asignadas directamente al elemento (como en MovieDetails)
+        movieCard.poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "";
+        movieCard.title = movie.title || "...";
+        movieCard.overview = movie.overview || "";
+        movieCard.vote_average = movie.vote_average ?? "";
+        movieCard.release_date = movie.release_date || "";
         movieCard.style.cursor = 'pointer';
         movieCard.addEventListener('click', () => openMovieDetails(movie.id));
         placeholder.appendChild(movieCard);
@@ -140,7 +145,7 @@ const renderCards = (info, placeholder) => {
 async function init() {
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
-    renderCards(trendingWeekMovies, cardsContainer);
+    renderCards(trendingWeekMovies, cardsContainer, 'slider');
 
     const genres = await genre_list();
     side_bar.genres = genres;
