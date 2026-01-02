@@ -16,7 +16,7 @@ const cardsContainer = document.createElement("section");
 cardsContainer.id = "trending-cards";
 
 headerContainer.appendChild(header);
-main.appendChild(slider);
+//main.appendChild(slider);
 main.appendChild(cardsContainer);
 console.log("Hello Movies ");
 
@@ -145,7 +145,7 @@ const renderCards = (info, placeholder, variant = 'v1') => {
 async function init() {
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
-    renderCards(trendingWeekMovies, cardsContainer, 'slider');
+    renderCards(trendingWeekMovies, cardsContainer, 'v2');
 
     const genres = await genre_list();
     side_bar.genres = genres;

@@ -8,10 +8,11 @@
 
 /* Layout */
 aside {
-  display: flex;
-  flex-direction: column;
+  /*display: flex;
+  flex-direction: column;*/
+  display: block;
   gap: var(--spacing-md);
-  /*height: 100%;*/
+  height: 80dvh;
   min-height: 24rem;
   padding: var(--spacing-lg) var(--spacing-md);
   background-color: var(--bg-secondary); /* Solid background, no transparency */
