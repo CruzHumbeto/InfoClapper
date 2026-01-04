@@ -15,6 +15,13 @@ html {
 }
 
 body {
+    --sidebar-width: 250px;
+    --main-grid-areas: "header header" "aside main" "footer footer";
+    --main-grid-cols: var(--sidebar-width) 1fr;
+    --main-grid-rows: auto 1fr auto;
+    --aside-visibility: visible;
+    --aside-opacity: 1;
+
     font-family: var(--font-family-primary);
     font-size: var(--font-size-base);
     line-height: 1.6;
@@ -22,14 +29,14 @@ body {
     background-color: var(--bg-primary);
     min-height: 100vh;
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 250px 1fr;
-    grid-template-areas: "header header" "aside main" "footer footer";
+    grid-template-rows: var(--main-grid-rows);
+    grid-template-columns: var(--main-grid-cols);
+    grid-template-areas: var(--main-grid-areas);
     background-image: url("../../public/images/pexels-tima-miroshnichenko-7991486.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1), grid-template-rows 0.3s ease;
   }
   
   /* Typography */
@@ -84,42 +91,43 @@ body {
   }
 
 body.sidebar-hidden {
-    grid-template-columns: 0px 1fr !important;
-    grid-template-rows: auto 1fr auto !important;
-    grid-template-areas: "header header" "main main" "footer footer" !important;
-    gap: 0 !important;
+    --main-grid-cols: 0px 1fr;
+    --aside-visibility: hidden;
+    --aside-opacity: 0;
 }
 
-body.sidebar-hidden #section_aside {
-    width: 0;
+#section_aside {
+    grid-area: aside;
+    width: 100%;
     overflow: hidden;
-    visibility: hidden;
-    opacity: 0;
-    padding: 0;
-    margin: 0;
+    visibility: var(--aside-visibility);
+    opacity: var(--aside-opacity);
     transition: all 0.3s ease;
 }
 
 
-  @media (max-width: 768px) {
-    body {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto 1fr auto;
-      grid-template-areas: "header" "aside" "main" "footer";
-      gap: 1rem;
-    }
-
-    header {
-      grid-area: header;
-    }
-
-    main {
-      grid-area: main;
-    }
-
-    #section_aside {
-      grid-area: aside;
-    }
-
+@media (max-width: 768px) {
+  body {
+    --main-grid-cols: 1fr;
+    --main-grid-rows: auto auto 1fr auto;
+    --main-grid-areas: "header" "aside" "main" "footer";
   }
+
+  body.sidebar-hidden {
+    --main-grid-rows: auto 0px 1fr auto;
+    --main-grid-cols: 1fr;
+    --main-grid-areas: "header" "aside" "main" "footer";
+  }
+
+  header {
+    grid-area: header;
+  }
+
+  main {
+    grid-area: main;
+  }
+
+  #section_aside {
+    grid-area: aside;
+  }
+}
