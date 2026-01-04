@@ -21,12 +21,15 @@ body {
     color: var(--text-primary);
     background-color: var(--bg-primary);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 250px 1fr;
+    grid-template-areas: "header header" "aside main" "footer footer";
     background-image: url("../../public/images/pexels-tima-miroshnichenko-7991486.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   /* Typography */
@@ -58,6 +61,7 @@ body {
   }
 
   header {
+    grid-area: header;
     position: sticky;
     display: block;
     top: 0;
@@ -68,6 +72,7 @@ body {
 
   main {
     /*margin-top: 4rem;*/
+    grid-area: main;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -78,29 +83,43 @@ body {
     overflow: auto;
   }
 
-  @media (min-width: 768px) {
+body.sidebar-hidden {
+    grid-template-columns: 0px 1fr !important;
+    grid-template-rows: auto 1fr auto !important;
+    grid-template-areas: "header header" "main main" "footer footer" !important;
+    gap: 0 !important;
+}
+
+body.sidebar-hidden #section_aside {
+    width: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+
+  @media (max-width: 768px) {
     body {
       display: grid;
-      grid-template-columns: 1fr 4fr;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas: "header" "aside" "main" "footer";
       gap: 1rem;
     }
 
     header {
-      grid-column: 1 / 3;
+      grid-area: header;
     }
 
     main {
-      grid-column: 2 / 3;
+      grid-area: main;
     }
 
     #section_aside {
-      grid-column: 1 / 2;
+      grid-area: aside;
     }
 
-  }
-
-  @media (min-width: 1024px) {
-    main {
-      /*flex-direction: row;*/
-    }
   }

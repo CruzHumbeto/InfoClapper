@@ -9,17 +9,22 @@ export default class BaseComponent extends HTMLElement {
 
     // lifecycle methods
     connectedCallback() {
-        const result = this.render();
-        const finalize = () => {
-            this.setUpListeners();
-            this.afterRender();
-        };
-        result instanceof Promise ? result.then(finalize).catch(console.error) : finalize();
+        this._update();
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue !== newValue) {
+            this.setState({ [name]: newValue });
+        }
     }
 
     // setter and rendering for state management
     setState(newState) {
         this.state = { ...this.state, ...newState };
+        this._update();
+    }
+
+    _update() {
         const result = this.render();
         const finalize = () => {
             this.setUpListeners();

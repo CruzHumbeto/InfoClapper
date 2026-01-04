@@ -44,13 +44,18 @@ class Header extends BaseComponent {
             }
         });
     }
-/*
     setUpListeners() {
-        this.shadowRoot.querySelector("#select-id").addEventListener("change", (e) => {
-            this.setState({ language: e.target.value });
-        });
+        const menuBtn = this.shadowRoot.querySelector("#button_aside");
+        if (menuBtn) {
+            menuBtn.addEventListener("click", () => {
+                this.dispatchEvent(new CustomEvent("toggle-sidebar", {
+                    bubbles: true,
+                    composed: true
+                }));
+            });
+        }
     }
-*/
+
 }
 
 customElements.define("header-component", Header);

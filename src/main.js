@@ -143,6 +143,9 @@ const renderCards = (info, placeholder, variant = 'v1') => {
 }
 
 async function init() {
+    document.addEventListener('toggle-sidebar', () => {
+        document.body.classList.toggle('sidebar-hidden');
+    });
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
     renderCards(trendingWeekMovies, cardsContainer, 'v2');

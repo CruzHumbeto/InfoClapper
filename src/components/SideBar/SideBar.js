@@ -9,8 +9,10 @@ const toPascalCase = (value) => value.replace(/(^\w|[\s-_]\w)/g, (segment) => se
 export class SideBar extends BaseComponent {
     constructor() {
         super();
-        this._genres = [];
-        //this.attachShadow({ mode: 'open' });
+        this.state = {
+            genres: [],
+            language: ''
+        };
     }
 
     static get observedAttributes() {
@@ -18,14 +20,23 @@ export class SideBar extends BaseComponent {
     }
     
     get genres() {
-        return this._genres;
+        return this.state.genres;
     }
 
     set genres(value) {
         if (Array.isArray(value)) {
-            this._genres = value;
-            this.render(); // Re-render when data changes
-            this.afterRender(); // Re-attach listeners/icons
+            this.setState({ genres: value });
+        }
+    }
+
+    setUpListeners(){
+        const toggleBtn = this.shadowRoot.querySelector('.toggle');
+        if(toggleBtn){
+            toggleBtn.addEventListener('click', () => {
+                this.dispatchEvent(new CustomEvent('toggle-sidebar', { 
+                    bubbles: true,
+                    composed: true }));
+            });
         }
     }
     
@@ -71,7 +82,7 @@ export class SideBar extends BaseComponent {
                                         <button>
                                             <selectedcontent></selectedcontent>
                                         </button>
-                                        ${this._genres.map((genre) => `<option value="${genre.id}">${genre.name}</option>`).join('')}
+                                        ${this.state.genres.map((genre) => `<option value="${genre.id}">${genre.name}</option>`).join('')}
                                     </select>
                                 </div>
                             </div>
