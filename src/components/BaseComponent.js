@@ -1,5 +1,8 @@
 // base component - parent class
 
+import { createElement, icons } from "lucide";
+import { toPascalCase } from "../utils/stringUtils.js";
+
 export default class BaseComponent extends HTMLElement {
     constructor() {
         super();
@@ -37,4 +40,26 @@ export default class BaseComponent extends HTMLElement {
     setUpListeners() {}
     cleanUp() {}
     afterRender() {}
+
+    /**
+     * Finds elements with data-lucide attribute and replaces them with SVG icons.
+     */
+    renderIcons() {
+        const lucideNodes = this.shadowRoot.querySelectorAll('[data-lucide]');
+        lucideNodes.forEach((el) => {
+            const name = el.getAttribute('data-lucide');
+            const iconKey = name ? toPascalCase(name) : "";
+            const iconNode = iconKey ? icons[iconKey] : undefined;
+            if (!iconNode) {
+                console.warn('Lucide icon not found:', name);
+                return;
+            }
+            try {
+                const svg = createElement(iconNode, { width: 20, height: 20, 'aria-hidden': 'true' });
+                if (svg) el.replaceWith(svg);
+            } catch (e) {
+                console.error('Error rendering lucide icon:', name, e);
+            }
+        });
+    }
 }

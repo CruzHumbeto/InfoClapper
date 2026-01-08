@@ -1,9 +1,6 @@
 // <---- SideBar component ---->
 import BaseComponent from "../BaseComponent.js";
-import { createElement, icons } from "lucide";
 import styles from "./SideBar.css?inline";
-
-const toPascalCase = (value) => value.replace(/(^\w|[\s-_]\w)/g, (segment) => segment.replace(/^[\s-_]/, "").toUpperCase());
 
 
 export class SideBar extends BaseComponent {
@@ -94,22 +91,7 @@ export class SideBar extends BaseComponent {
     }
 
     afterRender() {
-        const lucideNodes = this.shadowRoot.querySelectorAll('[data-lucide]');
-        lucideNodes.forEach((el) => {
-            const name = el.getAttribute('data-lucide');
-            const iconKey = name ? toPascalCase(name) : "";
-            const iconNode = iconKey ? icons[iconKey] : undefined;
-            if (!iconNode) {
-                console.warn('Lucide icon not found:', name);
-                return;
-            }
-            try {
-                const svg = createElement(iconNode, { width: 20, height: 20, 'aria-hidden': 'true' });
-                if (svg) el.replaceWith(svg);
-            } catch (e) {
-                console.error('Error rendering lucide icon:', name, e);
-            }
-        });
+        this.renderIcons();
     }
 }
 
