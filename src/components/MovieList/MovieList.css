@@ -1,0 +1,16 @@
+:host {
+    display: block;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin: var(--spacing-md);
+}
+
+.movie_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}

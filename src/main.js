@@ -4,6 +4,7 @@ import './components/MovieCard/card.js';
 import './components/MovieDetails/MovieDetails.js';
 import './components/SideBar/SideBar.js';
 import './components/Slider/Slider.js';
+import './components/MovieList/MovieList.js';
 
 const main = document.querySelector("main");
 const headerContainer = document.querySelector("header");
@@ -12,12 +13,23 @@ const section_aside = document.getElementById("section_aside");
 
 const header = document.createElement("header-component");
 const slider = document.createElement("movie-slider");
-const cardsContainer = document.createElement("section");
-cardsContainer.id = "trending-cards";
+//const cardsContainer = document.createElement("section");
+const movieList = document.createElement("movie-list");
+
+
+//cardsContainer.id = "trending-cards";
 
 headerContainer.appendChild(header);
-//main.appendChild(slider);
-main.appendChild(cardsContainer);
+main.appendChild(slider);
+//main.appendChild(cardsContainer);
+main.appendChild(movieList);
+slider.setAttribute("slot", "banner");
+
+movieList.appendChild(slider);
+
+
+
+
 console.log("Hello Movies ");
 
 const side_bar = document.createElement("side-bar");
@@ -83,6 +95,8 @@ async function fetch_movie_full(movieId) {
     }
 }
 
+// <---- render elements ---->
+
 /**
  * Create and show the MovieDetails modal for a given movie ID
  * @param {number|string} movieId
@@ -117,11 +131,10 @@ async function openMovieDetails(movieId) {
 /**
  * Render movie cards in a container
  * @param {Array} info - an array of movies information objects 
- * @param {HTMLElement} placeholder - an HTML element where the cards will be rendered 
+ * @param {Array} placeholder - an array of HTML element and slot name where the cards will be rendered 
  * @param {string} variant - card variant type: 'default' | 'slider'
  */
 const renderCards = (info, placeholder, variant = 'v1') => {
-    placeholder.innerHTML = "";
     if (!Array.isArray(info)) {
         console.error('renderCards expected an array, received:', info);
         return;
@@ -138,7 +151,8 @@ const renderCards = (info, placeholder, variant = 'v1') => {
         movieCard.release_date = movie.release_date || "";
         movieCard.style.cursor = 'pointer';
         movieCard.addEventListener('click', () => openMovieDetails(movie.id));
-        placeholder.appendChild(movieCard);
+        movieCard.setAttribute("slot", placeholder[1]);
+        placeholder[0].appendChild(movieCard);
     });
 }
 
@@ -148,7 +162,7 @@ async function init() {
     });
     const trendingWeekMovies = await fetch_trending_movie_week();
     console.log('Fetched movies:', trendingWeekMovies);
-    renderCards(trendingWeekMovies, cardsContainer, 'v2');
+    renderCards(trendingWeekMovies, [movieList, 'movie_list'], 'v2');
 
     const genres = await genre_list();
     side_bar.genres = genres;
