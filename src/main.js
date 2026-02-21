@@ -1,6 +1,7 @@
 import { API_KEY } from './secrets.js';
+import { context } from './utils/context.js';
 import './components/Header/Header.js';
-import './components/MovieCard/card.js';
+import './components/MovieCard/Card.js';
 import './components/MovieDetails/MovieDetails.js';
 import './components/SideBar/SideBar.js';
 import './components/Slider/Slider.js';
@@ -157,12 +158,20 @@ const renderCards = (info, placeholder, variant = 'v1') => {
 }
 
 async function init() {
+    // initialize context
+    context.state.genres = await genre_list();
+    context.state.popularMovies = await fetch_trending_movie_week();
+    context.state.movies = await fetch_trending_movie_week();
+    console.log(context.state.movies);
+
+
     document.addEventListener('toggle-sidebar', () => {
         document.body.classList.toggle('sidebar-hidden');
     });
     const trendingWeekMovies = await fetch_trending_movie_week();
-    console.log('Fetched movies:', trendingWeekMovies);
-    renderCards(trendingWeekMovies, [movieList, 'movie_list'], 'v2');
+    //console.log('Fetched movies:', trendingWeekMovies);
+    renderCards(context.state.movies, [movieList, 'movie_list'], 'v2');
+    //renderCards(context.state.popularMovies, [slider, 'card'], 'slider');
 
     const genres = await genre_list();
     side_bar.genres = genres;

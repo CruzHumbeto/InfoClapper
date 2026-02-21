@@ -2,13 +2,27 @@
 //
 import BaseComponent from "../BaseComponent.js";
 import styles from "./Slider.css?inline";
+import "../MovieCard/Card.js";
+import { context } from "../../utils/context.js";
 
 export default class Slider extends BaseComponent {
     constructor() {
         super();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        // Escuchar cambios en el estado global para re-renderizar
+        context.addEventListener("stateChange", (e) => {
+            if (e.detail.prop === "popularMovies") {
+                this._update();
+            }
+        });
+    }
+
     render() {
+        const sliderCards = this.getSliderCards();
+
         this.shadowRoot.innerHTML = `
             <style>
                 ${styles}
@@ -20,31 +34,33 @@ export default class Slider extends BaseComponent {
                 </div>
                 <div class="slider_track">
                     <ul class="carousel">
-                        <li class="slide">
-                            <span class="slide_tag">Premiere</span>
-                            <h3 class="slide_title">Blockbuster Launch</h3>
-                            <p class="slide_summary">Experience the newest cinematic release with stunning visuals and immersive sound.</p>
-                        </li>
-                        <li class="slide">
-                            <span class="slide_tag">Editorial</span>
-                            <h3 class="slide_title">Critics' Choice</h3>
-                            <p class="slide_summary">Handpicked dramas making waves during awards season across the globe.</p>
-                        </li>
-                        <li class="slide">
-                            <span class="slide_tag">Trending</span>
-                            <h3 class="slide_title">Community Picks</h3>
-                            <p class="slide_summary">Join the buzz around the most streamed stories capturing audiences this week.</p>
-                        </li>
-                        <li class="slide">
-                            <span class="slide_tag">Hidden Gem</span>
-                            <h3 class="slide_title">Indie Spotlight</h3>
-                            <p class="slide_summary">Discover daring storytelling from visionary filmmakers off the beaten path.</p>
-                        </li>
+                        ${sliderCards}
                     </ul>
                 </div>
             </section>
         `;
     }
+
+    getSliderCards() {
+        const range = 5;
+        const movies = context.state.popularMovies.slice(0, range);
+        
+        if (movies.length === 0) return '';
+
+        return movies.map(movie => {
+            return `
+                <movie-card 
+                    variant="slider" 
+                    tag="Popular" 
+                    class="slide"
+                    title="${movie.title}"
+                    overview="${movie.overview || ''}"
+                    poster="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                ></movie-card>
+            `;
+        }).join('');
+    }
+
 }
 
 customElements.define("movie-slider", Slider);

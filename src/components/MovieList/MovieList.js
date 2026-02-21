@@ -1,5 +1,5 @@
 //<--- movie list component --->
-import BaseComponent from "../BaseComponent";
+import BaseComponent from "../BaseComponent.js";
 import styles from "./MovieList.css?inline";
 
 export default class MovieList extends BaseComponent {

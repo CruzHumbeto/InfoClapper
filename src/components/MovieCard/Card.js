@@ -10,7 +10,7 @@ export class MovieCard extends BaseComponent {
     }
 
     static get observedAttributes() {
-        return ["variant", "tag"];
+        return ["variant", "tag", "title", "overview", "poster", "vote_average", "release_date"];
     }
 
     // Getter solo para atributos HTML
@@ -18,13 +18,13 @@ export class MovieCard extends BaseComponent {
     get tag() { return this.getAttribute("tag") || ""; }
 
     async render() {
-        // Normalize data to constants (propiedades asignadas directamente al elemento)
-        const poster = this.poster || "";
-        const title = this.title || "...";
-        const overview = this.overview || "...";
+        // Normalize data to constants (check properties first, then attributes)
+        const poster = this.poster || this.getAttribute("poster") || "";
+        const title = this.title || this.getAttribute("title") || "...";
+        const overview = this.overview || this.getAttribute("overview") || "...";
         const variant = this.variant;
-        const voteAverage = this.vote_average ?? "";
-        const releaseDate = this.release_date || "";
+        const voteAverage = this.vote_average ?? this.getAttribute("vote_average") ?? "";
+        const releaseDate = this.release_date || this.getAttribute("release_date") || "";
         const tag = this.tag;
 
         // Render based on variant
