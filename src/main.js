@@ -1,5 +1,5 @@
-import { API_KEY } from './secrets.js';
 import { context } from './utils/context.js';
+import { fetchGenres, fetchTrendingMovies, fetchMovieFull } from './utils/api.js';
 import './components/Header/Header.js';
 import './components/MovieCard/Card.js';
 import './components/MovieDetails/MovieDetails.js';
@@ -36,65 +36,7 @@ console.log("Hello Movies ");
 const side_bar = document.createElement("side-bar");
 section_aside.appendChild(side_bar);
 
-// <---- fetch API information --->
 
-/**
- * fetch genres list from the API
- * @returns an array of genres information objects
- */
-async function genre_list() {
-    try {
-        const response = await fetch("https://api.themoviedb.org/3/genre/movie/list?language=es-MX&api_key=" + API_KEY);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        const genres = Array.isArray(data.genres) ? data.genres : [];
-        return genres;
-    } catch (err) {
-        console.error('Error fetching genres:', err);
-        return [];
-    }
-}
-
-
-/**
- * fetch trending movies list from the API
- * @returns an array of movies information objects
- */
-async function fetch_trending_movie_week() {
-    try {
-        const response = await fetch("https://api.themoviedb.org/3/trending/movie/week?language=es-MX&api_key=" + API_KEY);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        const movies = Array.isArray(data.results) ? data.results : [];
-        return movies;
-    } catch (err) {
-        console.error('Error fetching trending movies:', err);
-        return [];
-    }
-}
-
-/**
- * Fetch full movie details and credits by movie ID
- * @param {number|string} movieId
- * @returns {Promise<{details: any, credits: any} | null>}
- */
-async function fetch_movie_full(movieId) {
-    if (!movieId) return null;
-    try {
-        const base = 'https://api.themoviedb.org/3/movie/' + movieId;
-        const [detailsRes, creditsRes] = await Promise.all([
-            fetch(`${base}?language=es-MX&api_key=${API_KEY}`),
-            fetch(`${base}/credits?language=es-MX&api_key=${API_KEY}`)
-        ]);
-        if (!detailsRes.ok) throw new Error(`Details HTTP ${detailsRes.status}`);
-        if (!creditsRes.ok) throw new Error(`Credits HTTP ${creditsRes.status}`);
-        const [details, credits] = await Promise.all([detailsRes.json(), creditsRes.json()]);
-        return { details, credits };
-    } catch (err) {
-        console.error('Error fetching movie details/credits:', err);
-        return null;
-    }
-}
 
 // <---- render elements ---->
 
@@ -107,7 +49,7 @@ async function openMovieDetails(movieId) {
     // Close any existing modal
     document.querySelectorAll('movie-details').forEach(el => el.remove());
 
-    const data = await fetch_movie_full(movieId);
+    const data = await fetchMovieFull(movieId);
     if (!data) return;
 
     const { details, credits } = data;
@@ -159,22 +101,19 @@ const renderCards = (info, placeholder, variant = 'v1') => {
 
 async function init() {
     // initialize context
-    context.state.genres = await genre_list();
-    context.state.popularMovies = await fetch_trending_movie_week();
-    context.state.movies = await fetch_trending_movie_week();
+    context.state.genres = await fetchGenres();
+    context.state.movies = await fetchTrendingMovies();
+    context.state.popularMovies = await fetchTrendingMovies();
     console.log(context.state.movies);
-
+    console.log(context.state.genres);
 
     document.addEventListener('toggle-sidebar', () => {
         document.body.classList.toggle('sidebar-hidden');
     });
-    const trendingWeekMovies = await fetch_trending_movie_week();
-    //console.log('Fetched movies:', trendingWeekMovies);
+    const trendingWeekMovies = await fetchTrendingMovies();
     renderCards(context.state.movies, [movieList, 'movie_list'], 'v2');
-    //renderCards(context.state.popularMovies, [slider, 'card'], 'slider');
 
-    const genres = await genre_list();
-    side_bar.genres = genres;
+    side_bar.genres = context.state.genres;
 }
 
 init();
