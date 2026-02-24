@@ -164,14 +164,19 @@ export default class Slider extends BaseComponent {
         if (!carousel || this._movies.length === 0) return;
 
         this._autoplayTimer = setInterval(() => {
+            const carousel = this.shadowRoot.querySelector('.carousel');
             const slides = this.shadowRoot.querySelectorAll('.slide');
-            if (slides.length === 0) return;
+            if (!carousel || slides.length === 0) return;
 
             this._currentIndex = (this._currentIndex + 1) % slides.length;
-            slides[this._currentIndex].scrollIntoView({
+
+            // Use scrollLeft directly so the page viewport does NOT move
+            const target = slides[this._currentIndex];
+            const carouselLeft = carousel.getBoundingClientRect().left;
+            const slideLeft = target.getBoundingClientRect().left;
+            carousel.scrollBy({
+                left: slideLeft - carouselLeft,
                 behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center',
             });
         }, 20000);
     }
