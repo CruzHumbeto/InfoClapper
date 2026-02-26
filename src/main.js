@@ -7,38 +7,8 @@ import './components/SideBar/SideBar.js';
 import './components/Slider/Slider.js';
 import './components/MovieList/MovieList.js';
 
-const main = document.querySelector("main");
-const headerContainer = document.querySelector("header");
-const section_aside = document.getElementById("section_aside");
 
-
-const header = document.createElement("header-component");
-const slider = document.createElement("movie-slider");
-//const cardsContainer = document.createElement("section");
-const movieList = document.createElement("movie-list");
-
-
-//cardsContainer.id = "trending-cards";
-
-headerContainer.appendChild(header);
-main.appendChild(slider);
-//main.appendChild(cardsContainer);
-main.appendChild(movieList);
-slider.setAttribute("slot", "banner");
-
-movieList.appendChild(slider);
-
-
-
-
-console.log("Hello Movies ");
-
-const side_bar = document.createElement("side-bar");
-section_aside.appendChild(side_bar);
-
-
-
-// <---- render elements ---->
+// <---- rendering functions ---->
 
 /**
  * Create and show the MovieDetails modal for a given movie ID
@@ -50,6 +20,7 @@ async function openMovieDetails(movieId) {
     document.querySelectorAll('movie-details').forEach(el => el.remove());
 
     const data = await fetchMovieFull(movieId);
+    console.log(data);
     if (!data) return;
 
     const { details, credits } = data;
@@ -70,48 +41,43 @@ async function openMovieDetails(movieId) {
     document.body.appendChild(el);
 }
 
-// render cards
-/**
- * Render movie cards in a container
- * @param {Array} info - an array of movies information objects 
- * @param {Array} placeholder - an array of HTML element and slot name where the cards will be rendered 
- * @param {string} variant - card variant type: 'default' | 'slider'
- */
-const renderCards = (info, placeholder, variant = 'v1') => {
-    if (!Array.isArray(info)) {
-        console.error('renderCards expected an array, received:', info);
-        return;
-    }
-    info.forEach(movie => {
-        const movieCard = document.createElement("movie-card");
-        // Solo variant usa setAttribute (es el único atributo observado)
-        movieCard.setAttribute("variant", variant);
-        // Propiedades asignadas directamente al elemento (como en MovieDetails)
-        movieCard.poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "";
-        movieCard.title = movie.title || "...";
-        movieCard.overview = movie.overview || "";
-        movieCard.vote_average = movie.vote_average ?? "";
-        movieCard.release_date = movie.release_date || "";
-        movieCard.style.cursor = 'pointer';
-        movieCard.addEventListener('click', () => openMovieDetails(movie.id));
-        movieCard.setAttribute("slot", placeholder[1]);
-        placeholder[0].appendChild(movieCard);
-    });
-}
 
 async function init() {
-    // initialize context
+    // <---- draw elements ---->
+    const main = document.querySelector("main");
+    const headerContainer = document.querySelector("header");
+    const section_aside = document.getElementById("section_aside");
+
+    const header = document.createElement("header-component");
+    const slider = document.createElement("movie-slider");
+    const movieList = document.createElement("movie-list");
+    const side_bar = document.createElement("side-bar");
+
+    headerContainer.appendChild(header);
+    main.appendChild(slider);
+    main.appendChild(movieList);
+    slider.setAttribute("slot", "banner");
+    section_aside.appendChild(side_bar);
+
+    //movieList.appendChild(slider);
+    
+    // <---- initialize context ---->
     context.state.genres = await fetchGenres();
     context.state.movies = await fetchTrendingMovies();
     context.state.popularMovies = await fetchTrendingMovies();
+    console.log(context.state.actualScreen);
     console.log(context.state.movies);
-    console.log(context.state.genres);
+    console.log(context.state.popularMovies);
+    //console.log(context.state.genres);
 
     document.addEventListener('toggle-sidebar', () => {
         document.body.classList.toggle('sidebar-hidden');
     });
-    const trendingWeekMovies = await fetchTrendingMovies();
-    renderCards(context.state.movies, [movieList, 'movie_list'], 'v2');
+    
+    // Escuchar el evento emitido por las cards del MovieList
+    document.addEventListener('open-movie-details', (e) => {
+        openMovieDetails(e.detail.id);
+    });
 
     side_bar.genres = context.state.genres;
 }

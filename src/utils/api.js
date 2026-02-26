@@ -22,6 +22,70 @@ export async function fetchGenres() {
 }
 
 /**
+ * fetch movies currently in theaters list from the API
+ * @returns an array of movies information objects
+ */
+export async function fetchNowPlayingMovies() {
+    try {
+        const response = await fetch(`${BASE_URL}/movie/now_playing?language=en-US&api_key=${API_KEY}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data.results) ? data.results : [];
+    } catch (err) {
+        console.error('Error fetching now playing movies:', err);
+        return [];
+    }
+}
+
+/**
+ * fetch top rated movies list from the API
+ * @returns an array of movies information objects
+ */
+export async function fetchTopRatedMovies() {
+    try {
+        const response = await fetch(`${BASE_URL}/movie/top_rated?language=en-US&api_key=${API_KEY}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data.results) ? data.results : [];
+    } catch (err) {
+        console.error('Error fetching top rated movies:', err);
+        return [];
+    }
+}
+
+/**
+ * fetch upcoming movies list from the API
+ * @returns an array of movies information objects
+ */
+export async function fetchUpcomingMovies() {
+    try {
+        const response = await fetch(`${BASE_URL}/movie/upcoming?language=en-US&api_key=${API_KEY}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data.results) ? data.results : [];
+    } catch (err) {
+        console.error('Error fetching upcoming movies:', err);
+        return [];
+    }
+}
+
+/**
+ * fetch movie list from the API
+ * @returns an array of movies information objects
+ */
+export async function fetchMovieList() {
+  try {
+    const response = await fetch(`${BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    return Array.isArray(data.results) ? data.results : [];
+  } catch (err) {
+    console.error('Error fetching movie list:', err);
+    return [];
+  }
+}
+
+/**
  * fetch trending movies list from the API
  * @returns an array of movies information objects
  */
