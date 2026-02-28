@@ -62,7 +62,7 @@ export default class Slider extends BaseComponent {
     }
 
     getSliderCards() {
-        const range = 5;
+        const range = 7;
         const movies = context.state.popularMovies.slice(0, range);
         this._movies = movies;
 

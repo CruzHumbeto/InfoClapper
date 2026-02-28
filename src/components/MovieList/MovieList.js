@@ -39,7 +39,7 @@ export default class MovieList extends BaseComponent {
                 ${styles}
             </style>
             <section>
-                <h2>Movie List</h2>
+                <h2>${context.state.actualScreen}</h2>
                 <slot name="banner"></slot>
                 <div class="movie_list">
                     ${moviesHtml}

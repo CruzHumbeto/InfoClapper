@@ -22,6 +22,35 @@ export async function fetchGenres() {
 }
 
 /**
+ * fetch movies by genre from the API
+ * @param {number|string} genreId
+ * @returns an array of movies information objects
+ */
+export async function fetchGenreMovies(genreId) {
+    try {
+        const response = await fetch(`${BASE_URL}/discover/movie?with_genres=${genreId}&api_key=${API_KEY}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data.results) ? data.results : [];
+    } catch (err) {
+        console.error('Error fetching genre movies:', err);
+        return [];
+    }
+}
+
+export async function fetchPopularGenreMovies(genreId) {
+    try {
+        const response = await fetch(`${BASE_URL}/discover/movie?sort_by=vote_count.desc&with_genres=${genreId}&api_key=${API_KEY}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data.results) ? data.results : [];
+    } catch (err) {
+        console.error('Error fetching popular genre movies:', err);
+        return [];
+    }
+}
+
+/**
  * fetch movies currently in theaters list from the API
  * @returns an array of movies information objects
  */

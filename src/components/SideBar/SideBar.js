@@ -1,6 +1,7 @@
 // <---- SideBar component ---->
 import BaseComponent from "../BaseComponent.js";
 import styles from "./SideBar.css?inline";
+import { context } from "../../utils/context.js";
 
 
 export class SideBar extends BaseComponent {
@@ -35,6 +36,44 @@ export class SideBar extends BaseComponent {
                     composed: true }));
             });
         }
+
+        const selectLanguage = this.shadowRoot.getElementById('select-id');
+        if(selectLanguage){
+            selectLanguage.addEventListener('change', () => {
+                context.state.lang = selectLanguage.value;
+                console.log('language: ', context.state.lang);
+            });
+        }
+
+        const home = this.shadowRoot.getElementById('home');
+        if(home){
+            home.addEventListener('click', () => {
+                location.hash = '#home';
+            });
+        }
+
+        const recent = this.shadowRoot.getElementById('recent');
+        if(recent){
+            recent.addEventListener('click', () => {
+                location.hash = '#recent';
+            });
+        }
+
+        const popular = this.shadowRoot.getElementById('popular');
+        if(popular){
+            popular.addEventListener('click', () => {
+                location.hash = '#popular';
+            });
+        }
+
+        const genre_list = this.shadowRoot.getElementById('select-gen');
+        if(genre_list){
+            genre_list.addEventListener('change', () => {
+                const [id, name] = genre_list.value.split(',');
+                context.state.actualGenre = name;
+                location.hash = `#genre=${id}`;
+            });
+        }
     }
     
     render(){
@@ -60,13 +99,13 @@ export class SideBar extends BaseComponent {
                                 <option value="es">Spanish</option>
                             </select>
                         </li>
-                        <li>
+                        <li id="home">
                             <i data-lucide="home"></i><span>Home</span>
                         </li>
-                        <li>
+                        <li id="recent">
                             <i data-lucide="clock"></i><span>Recent</span>
                         </li>
-                        <li>
+                        <li id="popular">
                             <i data-lucide="heart"></i><span>Popular</span>
                         </li>
                         <li id="genre_list">
@@ -79,7 +118,7 @@ export class SideBar extends BaseComponent {
                                         <button>
                                             <selectedcontent></selectedcontent>
                                         </button>
-                                        ${this.state.genres.map((genre) => `<option value="${genre.id}">${genre.name}</option>`).join('')}
+                                        ${this.state.genres.map((genre) => `<option value="${[genre.id, genre.name]}">${genre.name}</option>`).join('')}
                                     </select>
                                 </div>
                             </div>

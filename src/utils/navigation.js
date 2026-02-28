@@ -1,6 +1,6 @@
 // hash-based navigation
 
-import { fetchGenres, fetchTrendingMovies, fetchMovieList, fetchNowPlayingMovies, fetchUpcomingMovies, fetchTopRatedMovies } from "./api";
+import { fetchGenres, fetchTrendingMovies, fetchMovieList, fetchNowPlayingMovies, fetchUpcomingMovies, fetchTopRatedMovies, fetchGenreMovies, fetchPopularGenreMovies } from "./api";
 import { context } from "./context";
 
 window.addEventListener('DOMContentLoaded', navigator, false);
@@ -13,11 +13,20 @@ function navigator() {
         '#popular': () => popularPage(),
         '#genre': () => genrePage()
     };
-    const path = window.location.hash;
-    const route = routes[path];
+    const path = window.location.hash || '#home';
+    
+    // Find a route that is a prefix of the current path
+    const routeKey = Object.keys(routes).find(key => path.startsWith(key));
+    const route = routes[routeKey];
+
     if (route) {
         route();
-    } //else routes['#home']();
+    } else {
+        homePage(); // Default fallback
+    }
+    // if hash change, scroll main element to top
+    const main = document.querySelector('main');
+    main.scrollTop = 0;   
 }
 
 async function homePage() {
@@ -48,6 +57,12 @@ async function popularPage() {
     console.log(window.location.hash);
 }
 
-function genrePage() {
+async function genrePage() {
+    const genreId = window.location.hash.split('=')[1];
+    context.state.actualScreen = context.state.actualGenre;
+    context.state.searching = true;
+    context.state.movies = await fetchGenreMovies(genreId);
+    context.state.popularMovies = await fetchPopularGenreMovies(genreId);
+    context.state.searching = false;
     console.log(window.location.hash);
 }
